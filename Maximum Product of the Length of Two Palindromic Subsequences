@@ -1,0 +1,42 @@
+class Solution {
+public:
+    string getSubsequence(const string& s, int bitmask) {
+        string subseq = "";
+        for (int i = 0; i < s.size(); ++i) {
+            if (bitmask & (1 << i)) {
+                subseq += s[i];
+            }
+        }
+        return subseq;
+    }
+      bool isPalindrome(const string& s) {
+        int left = 0, right = s.size() - 1;
+        while (left < right) {
+            if (s[left] != s[right]) return false;
+            left++;
+            right--;
+        }
+        return true;
+    }
+    int maxProduct(string s) {
+        int n = s.size();
+        int maxProduct = 0;
+        for (int mask1 = 1; mask1 < (1 << n); ++mask1) 
+        {
+            string subseq1 = getSubsequence(s, mask1);
+            if (!isPalindrome(subseq1)) continue; 
+            for (int mask2 = 1; mask2 < (1 << n); ++mask2) {
+                if (mask1 & mask2) continue;
+
+                string subseq2 = getSubsequence(s, mask2);
+                if (isPalindrome(subseq2)) {
+                    // Calculate the product of lengths
+                    int product = subseq1.size() * subseq2.size();
+                    maxProduct = max(maxProduct, product);
+                }
+            }
+        }
+
+        return maxProduct;
+    }
+};

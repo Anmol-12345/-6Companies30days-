@@ -1,0 +1,24 @@
+class Solution {
+public:
+    vector<string> findRepeatedDnaSequences(string s) {
+        unordered_set<string> seen;       
+        unordered_set<string> repeated; 
+        vector<string> result;
+
+        int n = s.length();
+        if (n < 10) return result; 
+
+        for (int i = 0; i <= n - 10; ++i) {
+            string sequence = s.substr(i, 10); 
+            if (seen.count(sequence)) {
+                repeated.insert(sequence);
+            } else {
+                seen.insert(sequence); 
+            }
+        }
+
+        // Convert the set of repeated sequences into a vector
+        result.assign(repeated.begin(), repeated.end());
+        return result;
+    }
+};

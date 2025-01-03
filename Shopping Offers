@@ -1,0 +1,44 @@
+class Solution {
+public:
+    int shoppingOffers(vector<int>& price, vector<vector<int>>& special, vector<int>& needs) {
+                unordered_map<string, int> memo;
+        auto encode = [](const vector<int>& needs) {
+            string key;
+            for (int need : needs) {
+                key += to_string(need) + ",";
+            }
+            return key;
+        };
+
+        function<int(vector<int>&)> dfs = [&](vector<int>& currentNeeds) {
+            // Memoization: Check if result is already computed
+            string key = encode(currentNeeds);
+            if (memo.count(key)) return memo[key];
+
+            int cost = 0;
+            for (int i = 0; i < price.size(); ++i) {
+                cost += currentNeeds[i] * price[i];
+            }
+
+            for (const auto& offer : special) {
+                bool valid = true;
+                vector<int> newNeeds = currentNeeds;
+                for (int i = 0; i < currentNeeds.size(); ++i) {
+                    newNeeds[i] -= offer[i];
+                    if (newNeeds[i] < 0) { 
+                        valid = false;
+                        break;
+                    }
+                }
+                if (valid) {
+                    cost = min(cost, offer.back() + dfs(newNeeds)); // Cost with the offer
+                }
+            }
+
+            // Store the result in memo and return
+            return memo[key] = cost;
+        };
+
+        return dfs(needs);
+    }
+};

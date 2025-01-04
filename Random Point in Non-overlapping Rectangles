@@ -1,0 +1,40 @@
+class Solution {
+private:
+    vector<vector<int>> rects;
+    vector<int> prefixAreas;
+    int totalArea;
+
+public:
+    Solution(vector<vector<int>>& rects) : rects(rects), totalArea(0) {
+        for (const auto& rect : rects) {
+            int width = rect[2] - rect[0] + 1;
+            int height = rect[3] - rect[1] + 1;
+            totalArea += width * height;
+            prefixAreas.push_back(totalArea);
+        }
+        srand(time(0));
+    }
+    
+    vector<int> pick() {
+        int randArea = rand() % totalArea;
+
+        int rectIndex = lower_bound(prefixAreas.begin(), prefixAreas.end(), randArea + 1) - prefixAreas.begin();
+
+        // Select the rectangle
+        const auto& rect = rects[rectIndex];
+        int xMin = rect[0], yMin = rect[1];
+        int xMax = rect[2], yMax = rect[3];
+
+        // Generate a random point within the rectangle
+        int x = xMin + rand() % (xMax - xMin + 1);
+        int y = yMin + rand() % (yMax - yMin + 1);
+
+        return {x, y};
+    }
+};
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution* obj = new Solution(rects);
+ * vector<int> param_1 = obj->pick();
+ */

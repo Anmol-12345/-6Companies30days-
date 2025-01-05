@@ -1,0 +1,22 @@
+class Solution {
+public:
+    string convertToTitle(int columnNumber) {
+        string result = "";
+
+        while (columnNumber > 0) {
+            // Decrement columnNumber to make it 0-indexed
+            columnNumber--;
+
+            // Find the character for the current position
+            char ch = 'A' + (columnNumber % 26);
+
+            // Prepend the character to the result
+            result = ch + result;
+
+            // Move to the next higher position
+            columnNumber /= 26;
+        }
+
+        return result;
+    }
+};

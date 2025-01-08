@@ -1,0 +1,15 @@
+class Solution {
+  public:
+
+    void matchPairs(int n, char nuts[], char bolts[]) {
+          string order = "!#$%&*?@^";
+        unordered_map<char, int> priority;
+
+        for (int i = 0; i < order.size(); i++) {
+            priority[order[i]] = i;
+        }
+
+        sort(nuts, nuts + n, [&](char a, char b) { return priority[a] < priority[b]; });
+        sort(bolts, bolts + n, [&](char a, char b) { return priority[a] < priority[b]; });
+    }
+};

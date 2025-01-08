@@ -1,0 +1,33 @@
+class Solution{
+public:
+    vector<vector<string>> displayContacts(int n, string contact[], string s)
+    {
+               vector<vector<string>> result;
+
+        set<string> contactSet(contact, contact + n);
+        vector<string> contacts(contactSet.begin(), contactSet.end());
+
+        sort(contacts.begin(), contacts.end());
+
+        string prefix = "";
+        for (char c : s) {
+            prefix += c;
+            vector<string> matches;
+
+            for (const string &entry : contacts) {
+                if (entry.substr(0, prefix.size()) == prefix) {
+                    matches.push_back(entry);
+                }
+            }
+
+            if (matches.empty()) {
+                result.push_back({"0"});
+            } else {
+                result.push_back(matches);
+            }
+        }
+
+        return result;
+
+    }
+};

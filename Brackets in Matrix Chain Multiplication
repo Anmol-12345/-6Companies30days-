@@ -1,0 +1,34 @@
+class Solution {
+  public:
+    string matrixChainOrder(vector<int> &arr) {
+           int n = arr.size();
+        vector<vector<int>> dp(n, vector<int>(n, 0)); 
+        vector<vector<int>> split(n, vector<int>(n, 0)); 
+
+        for (int chain_len = 2; chain_len < n; chain_len++) {
+            for (int i = 1; i < n - chain_len + 1; i++) {
+                int j = i + chain_len - 1;
+                dp[i][j] = INT_MAX;
+                for (int k = i; k < j; k++) {
+                    int cost = dp[i][k] + dp[k + 1][j] + arr[i - 1] * arr[k] * arr[j];
+                    if (cost < dp[i][j]) {
+                        dp[i][j] = cost;
+                        split[i][j] = k; 
+                    }
+                }
+            }
+        }
+
+        function<string(int, int)> constructSolution = [&](int i, int j) -> string {
+            if (i == j) {
+                return string(1, 'A' + i - 1); 
+            }
+            int k = split[i][j];
+            string left = constructSolution(i, k);
+            string right = constructSolution(k + 1, j);
+            return "(" + left + right + ")";
+        };
+
+        return constructSolution(1, n - 1);
+    }
+};

@@ -1,0 +1,27 @@
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+         int n = s.size();
+        // Create a dp array where dp[i] will be true if s[0..i-1] can be segmented.
+        vector<bool> dp(n + 1, false);
+        dp[0] = true;  // Empty string can always be segmented
+
+        // Convert wordDict to a set for O(1) lookup time
+        unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
+
+        // Loop through each position in the string
+        for (int i = 1; i <= n; i++) {
+            // Check every possible starting point j for the substring ending at i
+            for (int j = 0; j < i; j++) {
+                // If s[0..j-1] can be segmented and the substring s[j..i-1] is in wordDict
+                if (dp[j] && wordSet.find(s.substr(j, i - j)) != wordSet.end()) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+
+        // The answer is whether the entire string s can be segmented
+        return dp[n];
+    }
+};

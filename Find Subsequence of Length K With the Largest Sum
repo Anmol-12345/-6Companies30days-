@@ -1,0 +1,32 @@
+class Solution {
+public:
+    vector<int> maxSubsequence(vector<int>& nums, int k) {
+        int n = nums.size();
+        vector<pair<int, int>> indexed_nums;
+    for (int i = 0; i < n; i++) {
+        indexed_nums.push_back({nums[i], i});
+    }
+    
+    sort(indexed_nums.begin(), indexed_nums.end(), [](pair<int, int>& a, pair<int, int>& b) {
+        return a.first > b.first;  
+    });
+    
+
+    vector<pair<int, int>> selected;
+    for (int i = 0; i < k; i++) {
+        selected.push_back(indexed_nums[i]);
+    }
+    
+    sort(selected.begin(), selected.end(), [](pair<int, int>& a, pair<int, int>& b) {
+        return a.second < b.second;  
+    });
+    
+    // Extract the values from the sorted pairs to get the final subsequence
+    vector<int> result;
+    for (const auto& p : selected) {
+        result.push_back(p.first);
+    }
+    
+    return result;
+    }
+};

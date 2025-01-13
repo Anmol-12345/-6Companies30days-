@@ -1,0 +1,54 @@
+class Solution {
+public:
+int solveusingrecursion(string &s,vector<string>&dictionary,int i)
+{
+    int n = s.size();
+    if(i>=n)
+    {
+        return 0;
+    }
+    unordered_set<string>st(begin(dictionary),end(dictionary));
+    int result = 1+solveusingrecursion(s,dictionary,i+1);
+    for(int j = i;j<n;j++)
+    {
+        string curr = s.substr(i,j-i+1);
+        if(st.count(curr))
+        {
+            result = min(result,solveusingrecursion(s,dictionary,j+1));
+        }
+    }
+    return result;
+}
+int solveusingMemo(string &s,vector<string>&dictionary,int i,vector<int>&dp)
+{
+    int n = s.size();
+    if(i>=n)
+    {
+        return 0;
+    }
+    if(dp[i]!=-1)
+    {
+        return dp[i];
+    }
+    unordered_set<string>st(begin(dictionary),end(dictionary));
+    int result = 1+solveusingMemo(s,dictionary,i+1,dp);
+    for(int j = i;j<n;j++)
+    {
+        string curr = s.substr(i,j-i+1);
+        if(st.count(curr))
+        {
+            result = min(result,solveusingMemo(s,dictionary,j+1,dp));
+        }
+    }
+    dp[i] = result;
+    return dp[i];
+}
+    int minExtraChar(string s, vector<string>& dictionary) {
+        int i =0;
+        int n = s.size();
+        // int ans = solveusingrecursion(s,dictionary,i);
+        vector<int>dp(n+1,-1);
+        int ans = solveusingMemo(s,dictionary,i,dp);
+        return ans;
+    }
+};

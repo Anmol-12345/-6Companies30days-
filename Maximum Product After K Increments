@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int maximumProduct(vector<int>& nums, int k) {
+        priority_queue<int, vector<int>, greater<int>> minHeap(nums.begin(), nums.end());
+        
+        for (int i = 0; i < k; ++i) {
+            int smallest = minHeap.top();  
+            minHeap.pop();  
+            minHeap.push(smallest + 1);  
+        }
+        
+        long long product = 1;
+        const int MOD = 1e9 + 7;  
+        while (!minHeap.empty()) {
+            product = (product * minHeap.top()) % MOD;  
+            minHeap.pop();  
+        }
+        
+        return (int)product; 
+    }
+};

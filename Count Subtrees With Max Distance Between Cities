@@ -1,0 +1,88 @@
+class Solution {
+public:
+    vector<int> countSubgraphsForEachDiameter(int n, vector<vector<int>>& edges) {
+          vector<vector<int>> adj(n);
+        for (const auto& edge : edges) {
+            int u = edge[0] - 1;
+            int v = edge[1] - 1;
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+        
+        auto bfs = [&](int start, const bitset<16>& subset) -> int {
+            vector<int> dist(n, -1);
+            queue<int> q;
+            dist[start] = 0;
+            q.push(start);
+            int farthest = start;
+
+            while (!q.empty()) {
+                int node = q.front();
+                q.pop();
+                for (int neighbor : adj[node]) {
+                    if (subset[neighbor] && dist[neighbor] == -1) {  
+                        dist[neighbor] = dist[node] + 1;
+                        q.push(neighbor);
+                        if (dist[neighbor] > dist[farthest]) {
+                            farthest = neighbor;
+                        }
+                    }
+                }
+            }
+
+            return dist[farthest];  
+        };
+        
+        vector<int> result(n - 1, 0); 
+        for (int mask = 1; mask < (1 << n); ++mask) {
+            bitset<16> subset(mask);
+            
+            int first_node = -1;
+            for (int i = 0; i < n; ++i) {
+                if (subset[i]) {
+                    first_node = i;
+                    break;
+                }
+            }
+
+            vector<int> dist(n, -1);
+            queue<int> q;
+            dist[first_node] = 0;
+            q.push(first_node);
+            bool is_connected = true;
+
+            while (!q.empty()) {
+                int node = q.front();
+                q.pop();
+                for (int neighbor : adj[node]) {
+                    if (subset[neighbor] && dist[neighbor] == -1) {
+                        dist[neighbor] = dist[node] + 1;
+                        q.push(neighbor);
+                    }
+                }
+            }
+
+            for (int i = 0; i < n; ++i) {
+                if (subset[i] && dist[i] == -1) {
+                    is_connected = false;
+                    break;
+                }
+            }
+
+            if (!is_connected) continue;
+
+            int max_diameter = 0;
+            for (int i = 0; i < n; ++i) {
+                if (subset[i]) {
+                    max_diameter = max(max_diameter, bfs(i, subset));
+                }
+            }
+
+            if (max_diameter > 0 && max_diameter < n) {
+                result[max_diameter - 1]++;  
+            }
+        }
+
+        return result;
+    }
+};

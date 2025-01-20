@@ -1,0 +1,32 @@
+
+
+class Solution {
+public:
+    void backtrack(int k, int n, int start, std::vector<int>& combination, std::vector<std::vector<int>>& result) {
+        // Base case: If we have selected k numbers and their sum is n, add the combination to result
+        if (combination.size() == k) {
+            if (n == 0) {
+                result.push_back(combination);
+            }
+            return;
+        }
+        
+        // Start the loop from the current number `start` to ensure numbers are distinct and in increasing order
+        for (int i = start; i <= 9; ++i) {
+            if (i > n) break; // No need to continue if the number exceeds the remaining sum `n`
+            
+            combination.push_back(i); // Choose the number
+            backtrack(k, n - i, i + 1, combination, result); // Recur with the next number and reduced sum
+            combination.pop_back(); // Backtrack and remove the last number
+        }
+    }
+
+    std::vector<std::vector<int>> combinationSum3(int k, int n) {
+        std::vector<std::vector<int>> result;
+        std::vector<int> combination;
+        
+        backtrack(k, n, 1, combination, result); // Start backtracking from number 1
+        
+        return result;
+    }
+};

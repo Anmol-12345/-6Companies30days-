@@ -1,0 +1,24 @@
+class Solution {
+public:
+    string printMinNumberForPattern(string S) {
+        stack<int> st;
+        string result = "";
+        int n = S.size();
+        
+        // Push digits from 1 to n+1 (inclusive)
+        for (int i = 1; i <= n + 1; ++i) {
+            st.push(i);  // Push the current number into the stack
+            
+            // If we've reached an 'I' or the end of the string, pop all elements from the stack
+            // This is because an 'I' means increasing, so we want to release all the digits in reverse order
+            if (i == n + 1 || S[i - 1] == 'I') {
+                while (!st.empty()) {
+                    result += to_string(st.top());
+                    st.pop();
+                }
+            }
+        }
+        
+        return result;
+    }
+};

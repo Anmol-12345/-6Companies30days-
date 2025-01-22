@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int minimizeSet(int divisor1, int divisor2, int uniqueCount1, int uniqueCount2) {
+        long left = 1, right = 1e10; 
+        long leastCommonMultiple = std::lcm(static_cast<long>(divisor1), static_cast<long>(divisor2)); 
+
+        while (left < right) {
+            long mid = (left + right) / 2; 
+            long count1 = mid / divisor1 * (divisor1 - 1) + mid % divisor1;
+            long count2 = mid / divisor2 * (divisor2 - 1) + mid % divisor2;
+          
+            long combinedCount = mid / leastCommonMultiple * (leastCommonMultiple - 1) + mid % leastCommonMultiple;
+          
+            if (count1 >= uniqueCount1 && count2 >= uniqueCount2 && combinedCount >= uniqueCount1 + uniqueCount2) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+
+        return left;
+    }
+};

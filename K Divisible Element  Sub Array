@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int countDistinct(vector<int>& nums, int maxDivisibleCount, int p) {
+        unordered_set<string> uniqueSubarrays;
+
+        int numSize = nums.size();
+
+        for (int startIdx = 0; startIdx < numSize; ++startIdx) {
+            int divisibleCount = 0;
+
+            string subarrayStr;
+
+            for (int endIdx = startIdx; endIdx < numSize; ++endIdx) {
+                if (nums[endIdx] % p == 0 && ++divisibleCount > maxDivisibleCount) {
+                    break;
+                }
+
+                subarrayStr += std::to_string(nums[endIdx]) + ",";
+              
+                uniqueSubarrays.insert(subarrayStr);
+            }
+        }
+
+        // Return the number of unique subarrays.
+        return uniqueSubarrays.size();
+    }
+};

@@ -1,0 +1,35 @@
+class Solution {
+public:
+    long long dp[4001][1001];
+    
+    long long count(int currentvertex, int target, int k) {
+        // Base case: if no steps left, check if the current vertex is the target
+        if (k == 0 && currentvertex == target) {
+            return 1;
+        }
+        // If no steps left but not at the target, return 0
+        if (k == 0) {
+            return 0;
+        }
+        
+        // Memoization check: if already computed, return the cached value
+        if (dp[currentvertex + 1000][k] != -1) {
+            return dp[currentvertex + 1000][k];
+        }
+        
+        // Recursively count the ways from current position with one less step
+        long long a = count(currentvertex + 1, target, k - 1);
+        a += count(currentvertex - 1, target, k - 1);
+        
+        // Store and return the result, mod 1000000007
+        return dp[currentvertex + 1000][k] = a % 1000000007;
+    }
+    
+    int numberOfWays(int startPos, int endPos, int k) {
+        // Initialize the dp table with -1 (representing uncomputed states)
+        memset(dp, -1, sizeof(dp));
+        
+        // Call the count function and return the result
+        return count(startPos, endPos, k);
+    }
+};
